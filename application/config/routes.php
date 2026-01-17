@@ -54,6 +54,7 @@ $route['cuaca'] = 'Landing/cuaca'; // Explicitly map /cuaca -> Landing/cuaca
 $route['artikel'] = 'Landing/artikel'; // Explicitly map /artikel -> Landing/artikel
 $route['login'] = 'Auth/login'; // Map /login -> Auth/login
 $route['logout'] = 'Auth/logout'; // Map /logout -> Auth/logout
+$route['artikel/(:any)'] = 'Landing/artikel_detail/$1'; // Article detail by slug
 
 // Admin Routes
 $route['admin'] = 'admin/Dashboard';

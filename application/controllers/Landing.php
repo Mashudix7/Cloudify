@@ -20,25 +20,29 @@ class Landing extends CI_Controller {
      */
     public function index()
     {
+        $this->load->model('Article_model');
+        
         $data = [
             'title' => 'Beranda',
             'active_menu' => 'home',
-            // Demo data - will be replaced with actual API data
+            // Default location: Jakarta
             'lokasi' => [
-                'desa' => 'Kemayoran',
+                'desa' => 'Menteng',
                 'provinsi' => 'DKI Jakarta',
-                'kotkab' => 'Kota Adm. Jakarta Pusat'
+                'kotkab' => 'Jakarta Pusat'
             ],
+            // Use real or dummy weather data (since user said 'later' for api implementation, we keep static or minimal)
             'cuaca_sekarang' => [
-                't' => 29,
-                'weather_desc' => 'Berawan',
-                'hu' => 72,
-                'ws' => 12,
+                't' => 31,
+                'weather_desc' => 'Cerah Berawan',
+                'hu' => 65,
+                'ws' => 15,
                 'tp' => 0,
-                'image' => 'https://api-apps.bmkg.go.id/storage/icon/cuaca/berawan-pm.svg'
+                'image' => 'https://api-apps.bmkg.go.id/storage/icon/cuaca/cerah-berawan-am.svg'
             ],
-            'suhu_max' => 32,
-            'suhu_min' => 24
+            'suhu_max' => 33,
+            'suhu_min' => 26,
+            'articles' => $this->Article_model->get_recent(3) // Fetch 3 latest articles
         ];
 
         $this->load->view('landing/index', $data);
@@ -62,12 +66,44 @@ class Landing extends CI_Controller {
      */
     public function artikel()
     {
+        $this->load->model('Article_model');
+        
         $data = [
             'title' => 'Artikel Cuaca',
-            'active_menu' => 'artikel'
+            'active_menu' => 'artikel',
+            'articles' => $this->Article_model->get_all('published')
         ];
 
-        // TODO: Load articles from database
-        $this->load->view('landing/index', $data);
+        $this->load->view('artikel/index', $data);
+    }
+
+    /**
+     * Article Detail Page
+     */
+    public function artikel_detail($slug)
+    {
+        $this->load->model(['Article_model', 'Reaction_model']);
+        
+        $article = $this->Article_model->get_by_slug($slug);
+        
+        if (!$article) {
+            show_404();
+        }
+
+        // Get reaction data
+        $ip_address = $this->input->ip_address();
+        $reaction_counts = $this->Reaction_model->get_counts($article['id']);
+        $user_reaction = $this->Reaction_model->get_user_reaction($article['id'], $ip_address);
+        
+        $data = [
+            'title' => $article['title'],
+            'active_menu' => 'artikel',
+            'article' => $article,
+            'admin_name' => 'Cloudify Admin',
+            'reaction_counts' => $reaction_counts,
+            'user_reaction' => $user_reaction
+        ];
+        
+        $this->load->view('artikel/detail', $data);
     }
 }

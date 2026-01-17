@@ -35,18 +35,11 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
-                        <?php 
-                        $demo_users = [
-                            ['name' => 'Budi Santoso', 'email' => 'budi.s@cloudify.com', 'role' => 'Super Admin', 'role_color' => 'purple', 'status' => 'active', 'initials' => 'BS'],
-                            ['name' => 'Siti Aminah', 'email' => 'siti.aminah@cloudify.com', 'role' => 'Editor', 'role_color' => 'blue', 'status' => 'active', 'initials' => 'SA'],
-                            ['name' => 'Rudi Hartono', 'email' => 'rudi.h@cloudify.com', 'role' => 'Viewer', 'role_color' => 'gray', 'status' => 'offline', 'initials' => 'RH'],
-                            ['name' => 'Dewi Sartika', 'email' => 'dewi.s@cloudify.com', 'role' => 'Editor', 'role_color' => 'blue', 'status' => 'active', 'initials' => 'DS'],
-                        ];
-                        foreach ($demo_users as $user): ?>
+                        <?php foreach ($users as $user): ?>
                         <tr class="group hover:bg-blue-50/50 transition-colors">
                             <td class="px-6 py-4">
                                 <div class="flex items-center gap-3">
-                                    <div class="size-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold"><?= $user['initials'] ?></div>
+                                    <div class="size-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold"><?= substr($user['name'], 0, 2) ?></div>
                                     <div class="flex flex-col">
                                         <span class="text-slate-900 text-sm font-semibold group-hover:text-primary transition-colors"><?= $user['name'] ?></span>
                                         <span class="text-slate-500 text-xs"><?= $user['email'] ?></span>
@@ -54,29 +47,24 @@
                                 </div>
                             </td>
                             <td class="px-6 py-4">
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-<?= $user['role_color'] ?>-100 text-<?= $user['role_color'] ?>-700 border border-<?= $user['role_color'] ?>-200">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200">
                                     <?= $user['role'] ?>
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <div class="flex items-center justify-end gap-1.5">
-                                    <?php if ($user['status'] === 'active'): ?>
                                     <div class="size-2 rounded-full bg-emerald-500 animate-pulse"></div>
                                     <span class="text-xs font-medium text-emerald-600">Active</span>
-                                    <?php else: ?>
-                                    <div class="size-2 rounded-full bg-slate-400"></div>
-                                    <span class="text-xs font-medium text-slate-500">Offline</span>
-                                    <?php endif; ?>
                                 </div>
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button class="text-slate-400 hover:text-primary transition-colors">
+                                    <a href="<?= base_url('admin/users/edit/'.$user['id']) ?>" class="text-slate-400 hover:text-blue-500 transition-colors" title="Edit">
                                         <span class="material-symbols-outlined text-lg">edit</span>
-                                    </button>
-                                    <button class="text-slate-400 hover:text-red-500 transition-colors">
+                                    </a>
+                                    <a href="<?= base_url('admin/users/delete/'.$user['id']) ?>" onclick="return confirm('Yakin hapus?')" class="text-slate-400 hover:text-red-500 transition-colors" title="Hapus">
                                         <span class="material-symbols-outlined text-lg">delete</span>
-                                    </button>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -154,9 +142,8 @@
                         <label class="text-xs font-semibold text-slate-700 uppercase tracking-wide ml-1">Role Access</label>
                         <div class="relative">
                             <select name="role" class="w-full pl-4 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all appearance-none cursor-pointer">
-                                <option value="super_admin">Super Admin</option>
-                                <option value="editor">Editor</option>
-                                <option value="viewer">Viewer</option>
+                                <option value="Super Admin">Super Admin</option>
+                                <option value="Editor">Editor</option>
                             </select>
                             <span class="material-symbols-outlined absolute right-3 top-3.5 text-slate-500 pointer-events-none">expand_more</span>
                         </div>

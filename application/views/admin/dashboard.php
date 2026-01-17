@@ -98,30 +98,27 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
-                    <?php 
-                    $demo_articles = [
-                        ['title' => 'Gelombang Panas Melanda Jakarta', 'author' => 'Sarah Jenkins', 'date' => '24 Okt 2023', 'time' => '10:42', 'status' => 'published', 'icon' => 'sunny', 'color' => 'orange'],
-                        ['title' => 'Update Tracker Siklon', 'author' => 'Tom Cook', 'date' => '22 Okt 2023', 'time' => '14:15', 'status' => 'published', 'icon' => 'cyclone', 'color' => 'blue'],
-                        ['title' => 'Integrasi Sensor Baru', 'author' => 'System', 'date' => '20 Okt 2023', 'time' => '09:00', 'status' => 'draft', 'icon' => 'sensors', 'color' => 'indigo'],
-                        ['title' => 'Ringkasan Prakiraan Mingguan', 'author' => 'Sarah Jenkins', 'date' => '15 Okt 2023', 'time' => '16:30', 'status' => 'published', 'icon' => 'cloud_queue', 'color' => 'sky'],
-                        ['title' => 'Jadwal Maintenance', 'author' => 'Dev Team', 'date' => '10 Okt 2023', 'time' => '08:00', 'status' => 'draft', 'icon' => 'warning', 'color' => 'rose'],
-                    ];
-                    foreach ($demo_articles as $article): ?>
+                    <?php if (empty($recent_articles)): ?>
+                    <tr>
+                        <td colspan="4" class="px-6 py-8 text-center text-slate-500 text-sm">Belum ada artikel.</td>
+                    </tr>
+                    <?php else: ?>
+                    <?php foreach ($recent_articles as $article): ?>
                     <tr class="group hover:bg-slate-50 transition-colors">
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
-                                <div class="size-10 rounded-lg bg-<?= $article['color'] ?>-100 flex items-center justify-center text-<?= $article['color'] ?>-600">
-                                    <span class="material-symbols-outlined"><?= $article['icon'] ?></span>
+                                <div class="size-10 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+                                    <span class="material-symbols-outlined">article</span>
                                 </div>
                                 <div>
                                     <p class="text-sm font-semibold text-slate-900 group-hover:text-primary transition-colors"><?= $article['title'] ?></p>
-                                    <p class="text-xs text-slate-500">oleh <?= $article['author'] ?></p>
+                                    <p class="text-xs text-slate-500">oleh Admin</p>
                                 </div>
                             </div>
                         </td>
                         <td class="px-6 py-4">
-                            <p class="text-sm text-slate-600"><?= $article['date'] ?></p>
-                            <p class="text-xs text-slate-400"><?= $article['time'] ?></p>
+                            <p class="text-sm text-slate-600"><?= date('d M Y', strtotime($article['created_at'])) ?></p>
+                            <p class="text-xs text-slate-400"><?= date('H:i', strtotime($article['created_at'])) ?></p>
                         </td>
                         <td class="px-6 py-4">
                             <?php if ($article['status'] === 'published'): ?>
@@ -138,16 +135,14 @@
                         </td>
                         <td class="px-6 py-4 text-right">
                             <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button class="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-primary/10 transition-colors" title="Edit">
+                                <a href="#" class="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-primary/10 transition-colors" title="Edit">
                                     <span class="material-symbols-outlined text-[20px]">edit</span>
-                                </button>
-                                <button class="p-2 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors" title="Hapus">
-                                    <span class="material-symbols-outlined text-[20px]">delete</span>
-                                </button>
+                                </a>
                             </div>
                         </td>
                     </tr>
                     <?php endforeach; ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>

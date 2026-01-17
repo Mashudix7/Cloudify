@@ -4,6 +4,7 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title><?= isset($title) ? $title . ' - Cloudify' : 'Cloudify - Weather Insight Platform' ?></title>
+    <link rel="icon" type="image/png" href="<?= base_url('favicon.png') ?>">
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
@@ -13,6 +14,11 @@
     
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Leaflet Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
     <script>
         tailwind.config = {
             darkMode: "class",

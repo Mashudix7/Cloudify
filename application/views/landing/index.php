@@ -38,14 +38,8 @@
                 
                 <!-- Weather Icon & Stats -->
                 <div class="flex flex-col items-center justify-center gap-8">
-                    <div class="relative size-48 md:size-64 drop-shadow-2xl animate-float">
-                        <?php if (isset($cuaca_sekarang['image'])): ?>
-                        <img src="<?= $cuaca_sekarang['image'] ?>" alt="Weather Icon" class="w-full h-full object-contain" style="filter: drop-shadow(0 20px 30px rgba(0,0,0,0.15));">
-                        <?php else: ?>
-                        <div class="w-full h-full flex items-center justify-center">
-                            <span class="material-symbols-outlined text-[150px] text-white/80">partly_cloudy_day</span>
-                        </div>
-                        <?php endif; ?>
+                    <div class="relative size-48 md:size-64 drop-shadow-2xl animate-float flex items-center justify-center">
+                        <span class="material-symbols-outlined text-white" style="font-size: 160px; font-variation-settings: 'FILL' 1;">partly_cloudy_day</span>
                     </div>
                     
                     <!-- Stats Grid -->
@@ -216,37 +210,45 @@
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <?php 
-            $demo_articles = [
-                ['title' => 'Memahami Musim Hujan di Indonesia', 'desc' => 'Panduan lengkap mempersiapkan diri menghadapi musim hujan dan dampaknya pada kehidupan sehari-hari.', 'category' => 'Meteorologi', 'date' => '12 Jan 2026'],
-                ['title' => 'Suhu Meningkat: Apa yang Akan Terjadi di 2026', 'desc' => 'Para ahli menganalisis data iklim terkini untuk memprediksi tren suhu tahun ini.', 'category' => 'Perubahan Iklim', 'date' => '10 Jan 2026'],
-                ['title' => '10 Perlengkapan Wajib Saat Hujan Tiba', 'desc' => 'Jangan sampai tidak siap. Berikut daftar barang yang harus selalu tersedia saat cuaca tidak menentu.', 'category' => 'Tips', 'date' => '8 Jan 2026'],
-            ];
-            foreach ($demo_articles as $index => $article): ?>
+            <?php if (!empty($articles)): ?>
+            <?php foreach ($articles as $index => $article): ?>
             <article class="flex flex-col bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 transition-all hover:shadow-lg group cursor-pointer h-full animate-fade-in-up delay-<?= ($index + 1) * 100 ?>">
-                <div class="h-48 overflow-hidden relative bg-gradient-to-br from-blue-400 to-blue-600">
-                    <div class="absolute inset-0 flex items-center justify-center text-white/30">
-                        <span class="material-symbols-outlined text-8xl">image</span>
+                <a href="<?= base_url('artikel/' . $article['slug']) ?>" class="block">
+                    <div class="h-48 overflow-hidden relative bg-gradient-to-br from-blue-400 to-blue-600">
+                        <?php if (!empty($article['thumbnail'])): ?>
+                        <img src="<?= base_url($article['thumbnail']) ?>" alt="<?= htmlspecialchars($article['title']) ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <?php else: ?>
+                        <div class="absolute inset-0 flex items-center justify-center text-white/30">
+                            <span class="material-symbols-outlined text-8xl">image</span>
+                        </div>
+                        <?php endif; ?>
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-slate-700 uppercase tracking-wider">
+                            <?= !empty($article['tags']) ? explode(',', $article['tags'])[0] : 'Cuaca' ?>
+                        </div>
                     </div>
-                    <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-slate-700 uppercase tracking-wider">
-                        <?= $article['category'] ?>
+                    <div class="p-6 flex flex-col flex-1">
+                        <div class="flex items-center text-xs text-slate-500 mb-3 gap-2">
+                            <span><?= date('d M Y', strtotime($article['created_at'])) ?></span>
+                            <span class="size-1 rounded-full bg-slate-300"></span>
+                            <span>5 min read</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors"><?= htmlspecialchars($article['title']) ?></h4>
+                        <p class="text-sm text-slate-500 mb-6 flex-1 line-clamp-3"><?= strip_tags(substr($article['content'], 0, 150)) ?>...</p>
+                        <div class="flex items-center gap-2 text-sm font-semibold text-primary">
+                            Baca Selengkapnya 
+                            <span class="material-symbols-outlined text-lg transition-transform group-hover:translate-x-1">arrow_forward</span>
+                        </div>
                     </div>
-                </div>
-                <div class="p-6 flex flex-col flex-1">
-                    <div class="flex items-center text-xs text-slate-500 mb-3 gap-2">
-                        <span><?= $article['date'] ?></span>
-                        <span class="size-1 rounded-full bg-slate-300"></span>
-                        <span>5 min read</span>
-                    </div>
-                    <h4 class="text-lg font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors"><?= $article['title'] ?></h4>
-                    <p class="text-sm text-slate-500 mb-6 flex-1 line-clamp-3"><?= $article['desc'] ?></p>
-                    <div class="flex items-center gap-2 text-sm font-semibold text-primary">
-                        Baca Selengkapnya 
-                        <span class="material-symbols-outlined text-lg transition-transform group-hover:translate-x-1">arrow_forward</span>
-                    </div>
-                </div>
+                </a>
             </article>
             <?php endforeach; ?>
+            <?php else: ?>
+            <div class="col-span-3 text-center py-16 text-slate-400">
+                <span class="material-symbols-outlined text-6xl mb-4">article</span>
+                <p class="text-lg font-medium">Belum ada artikel</p>
+                <p class="text-sm">Artikel akan muncul di sini setelah diterbitkan oleh admin.</p>
+            </div>
+            <?php endif; ?>
         </div>
     </div>
 </section>
