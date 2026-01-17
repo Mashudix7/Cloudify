@@ -23,7 +23,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'localhost/Cloudify/';
+// Dynamic base_url detection for multiple domains/hosts
+$config['base_url'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') 
+    . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') 
+    . rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/\\') . '/';
 
 /*
 |--------------------------------------------------------------------------
@@ -484,7 +487,7 @@ $config['csrf_exclude_uris'] = array();
 | by the output class.  Do not 'echo' any values with compression enabled.
 |
 */
-$config['compress_output'] = FALSE;
+$config['compress_output'] = TRUE;
 
 /*
 |--------------------------------------------------------------------------

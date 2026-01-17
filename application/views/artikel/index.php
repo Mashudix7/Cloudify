@@ -1,7 +1,7 @@
 <?php $this->load->view('templates/public_header', ['title' => 'Artikel Cuaca', 'active_menu' => 'artikel']); ?>
 
-<!-- Hero Banner -->
-<section class="relative bg-hero-gradient pt-28 pb-20 overflow-hidden">
+<!-- Hero Banner (extends behind navbar for seamless gradient) -->
+<section class="relative bg-hero-gradient pt-36 pb-20 overflow-hidden -mt-24 lg:-mt-28">
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
         <div class="absolute -top-40 -right-40 h-[400px] w-[400px] rounded-full bg-white/10 blur-3xl"></div>
         <div class="absolute bottom-0 -left-20 h-[300px] w-[300px] rounded-full bg-blue-400/20 blur-3xl"></div>
@@ -26,7 +26,7 @@
                 <article class="relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 grid grid-cols-1 lg:grid-cols-2">
                     <div class="h-64 lg:h-96 overflow-hidden">
                         <?php if (!empty($featured['thumbnail'])): ?>
-                        <img src="<?= base_url($featured['thumbnail']) ?>" alt="<?= htmlspecialchars($featured['title']) ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <img src="<?= base_url($featured['thumbnail']) ?>" alt="<?= htmlspecialchars($featured['title']) ?>" width="600" height="400" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                         <?php else: ?>
                         <div class="w-full h-full bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center">
                             <span class="material-symbols-outlined text-white/30 text-9xl">article</span>
@@ -68,7 +68,7 @@
                 <a href="<?= base_url('artikel/' . $article['slug']) ?>" class="block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full">
                     <div class="<?= $isLarge ? 'h-56' : 'h-48' ?> overflow-hidden relative">
                         <?php if (!empty($article['thumbnail'])): ?>
-                        <img src="<?= base_url($article['thumbnail']) ?>" alt="<?= htmlspecialchars($article['title']) ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="<?= base_url($article['thumbnail']) ?>" alt="<?= htmlspecialchars($article['title']) ?>" width="400" height="250" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy">
                         <?php else: ?>
                         <div class="w-full h-full bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
                             <span class="material-symbols-outlined text-slate-400 text-6xl">image</span>
@@ -116,6 +116,18 @@
         
         <?php endif; ?>
         
+    </div>
+</section>
+
+
+<!-- Article Slider Section -->
+<section class="py-12 bg-white border-t border-slate-100">
+    <div class="container mx-auto max-w-7xl px-4 lg:px-8">
+        <h3 class="text-2xl font-bold text-slate-900 mb-8 flex items-center gap-2">
+             <span class="material-symbols-outlined text-primary">breaking_news_alt_1</span>
+             Berita Sekilas
+        </h3>
+        <?php $this->load->view('templates/article_swiper', ['articles' => $articles]); ?>
     </div>
 </section>
 

@@ -55,6 +55,7 @@ $route['artikel'] = 'Landing/artikel'; // Explicitly map /artikel -> Landing/art
 $route['login'] = 'Auth/login'; // Map /login -> Auth/login
 $route['logout'] = 'Auth/logout'; // Map /logout -> Auth/logout
 $route['artikel/(:any)'] = 'Landing/artikel_detail/$1'; // Article detail by slug
+$route['peta-cuaca'] = 'Landing/peta_cuaca'; // Interactive weather map
 
 // Admin Routes
 $route['admin'] = 'admin/Dashboard';

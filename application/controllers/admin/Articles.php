@@ -51,6 +51,9 @@ class Articles extends CI_Controller {
             if ($this->upload->do_upload('thumbnail')) {
                 $uploadData = $this->upload->data();
                 $thumbnail = 'uploads/' . $uploadData['file_name'];
+                
+                // Compress Image
+                $this->_compress_image($uploadData['full_path']);
             } else {
                 // Log error for debugging
                 log_message('error', 'Upload error: ' . $this->upload->display_errors('', ''));
@@ -144,6 +147,9 @@ class Articles extends CI_Controller {
             if ($this->upload->do_upload('thumbnail')) {
                 $uploadData = $this->upload->data();
                 $thumbnail = 'uploads/' . $uploadData['file_name'];
+                
+                // Compress Image
+                $this->_compress_image($uploadData['full_path']);
             }
         }
 
@@ -165,5 +171,37 @@ class Articles extends CI_Controller {
             $this->session->set_flashdata('error', 'Gagal mengupdate artikel!');
         }
         redirect('admin/articles');
+    }
+    private function _compress_image($file_path)
+    {
+        // Get original dimensions
+        list($width, $height) = getimagesize($file_path);
+        
+        $this->load->library('image_lib');
+        
+        // Standard config
+        $config['image_library']  = 'gd2';
+        $config['source_image']   = $file_path;
+        $config['create_thumb']   = FALSE;
+        $config['maintain_ratio'] = TRUE;
+        $config['quality']        = '70%'; // Good balance for web
+        
+        // Resize only if wider than 1200px
+        if ($width > 1200) {
+            $config['width'] = 1200;
+        } else {
+            $config['width'] = $width;
+        }
+        // Also ensure height isn't excessive (optional) but width constraint usually enables it
+        
+        $this->image_lib->initialize($config);
+        
+        if (!$this->image_lib->resize()) {
+            log_message('error', 'Image compression failed: ' . $this->image_lib->display_errors());
+            return false;
+        }
+        
+        $this->image_lib->clear();
+        return true;
     }
 }

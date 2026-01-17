@@ -25,27 +25,41 @@ class Landing extends CI_Controller {
         $data = [
             'title' => 'Beranda',
             'active_menu' => 'home',
-            // Default location: Jakarta
+            'articles' => $this->Article_model->get_recent(6)
+        ];
+
+        $this->load->view('landing/index', $data);
+    }
+
+    public function api_weather()
+    {
+        // Simulate API delay if needed, or just return data
+        $data = [
             'lokasi' => [
                 'desa' => 'Menteng',
                 'provinsi' => 'DKI Jakarta',
                 'kotkab' => 'Jakarta Pusat'
             ],
-            // Use real or dummy weather data (since user said 'later' for api implementation, we keep static or minimal)
             'cuaca_sekarang' => [
                 't' => 31,
                 'weather_desc' => 'Cerah Berawan',
                 'hu' => 65,
                 'ws' => 15,
                 'tp' => 0,
-                'image' => 'https://api-apps.bmkg.go.id/storage/icon/cuaca/cerah-berawan-am.svg'
             ],
             'suhu_max' => 33,
             'suhu_min' => 26,
-            'articles' => $this->Article_model->get_recent(3) // Fetch 3 latest articles
+            'forecast' => [
+                ['day' => 'Hari Ini', 'icon' => 'wb_sunny', 'desc' => 'Cerah', 'color' => 'text-yellow-500', 'low' => 24, 'high' => 32],
+                ['day' => 'Jumat', 'icon' => 'cloud', 'desc' => 'Berawan', 'color' => 'text-slate-400', 'low' => 23, 'high' => 29],
+                ['day' => 'Sabtu', 'icon' => 'rainy', 'desc' => 'Hujan', 'color' => 'text-blue-400', 'low' => 21, 'high' => 26],
+                ['day' => 'Minggu', 'icon' => 'wb_twilight', 'desc' => 'Cerah Berawan', 'color' => 'text-orange-400', 'low' => 22, 'high' => 28],
+            ]
         ];
-
-        $this->load->view('landing/index', $data);
+        
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($data));
     }
 
     /**
@@ -59,6 +73,19 @@ class Landing extends CI_Controller {
         ];
 
         $this->load->view('landing/index', $data);
+    }
+
+    /**
+     * Interactive Weather Map Page
+     */
+    public function peta_cuaca()
+    {
+        $data = [
+            'title' => 'Peta Cuaca DKI Jakarta',
+            'active_menu' => 'cuaca'
+        ];
+
+        $this->load->view('cuaca/peta', $data);
     }
 
     /**
