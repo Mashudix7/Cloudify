@@ -49,9 +49,9 @@
         </div>
         <?php endif; ?>
         
-        <!-- Content -->
-        <div class="prose prose-lg max-w-none prose-headings:text-slate-900 prose-p:text-slate-600 prose-p:leading-relaxed prose-a:text-primary prose-a:no-underline hover:prose-a:underline">
-            <?= nl2br($article['content']) ?>
+        <!-- Content: HTML dari Quill editor sudah di-sanitasi saat disimpan -->
+        <div class="prose prose-lg max-w-none prose-headings:text-slate-900 prose-p:text-slate-600 prose-p:leading-relaxed prose-a:text-primary prose-a:no-underline hover:prose-a:underline article-content">
+            <?= $article['content'] ?>
         </div>
         
         <!-- Reactions -->

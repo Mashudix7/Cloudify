@@ -1,6 +1,15 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+/**
+ * Notifications Controller - AJAX endpoint untuk notifikasi admin
+ * 
+ * Controller ini menangani operasi notifikasi via AJAX:
+ * - Mengambil notifikasi terbaru
+ * - Menandai notifikasi sebagai dibaca
+ * 
+ * PENTING: Menggunakan $this->output untuk kompatibilitas dengan GZIP compression
+ */
 class Notifications extends CI_Controller {
 
     public function __construct()
@@ -9,47 +18,74 @@ class Notifications extends CI_Controller {
         $this->load->library('session');
         $this->load->model('Notification_model');
 
-        // Ensure admin is logged in
+        // Pastikan admin sudah login
         if (!$this->session->userdata('admin_logged_in')) {
-            // Returns 401 Unauthorized for AJAX calls
-            $this->output->set_status_header(401);
-            echo json_encode(['error' => 'Unauthorized']);
-            exit;
+            // Return 401 untuk AJAX calls
+            $this->output
+                ->set_status_header(401)
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Unauthorized']));
+            return;
         }
     }
 
-    // Get latest notifications (AJAX)
+    /**
+     * Ambil notifikasi terbaru (AJAX)
+     * 
+     * Menggunakan $this->output agar kompatibel dengan GZIP compression
+     */
     public function get_latest()
     {
-        $notifications = $this->Notification_model->get_latest(10);
-        $unread_count = $this->Notification_model->count_unread();
+        try {
+            $notifications = $this->Notification_model->get_latest(10);
+            $unread_count = $this->Notification_model->count_unread();
 
-        $response = [
-            'notifications' => $notifications,
-            'unread_count' => $unread_count
-        ];
+            $response = [
+                'success' => true,
+                'notifications' => $notifications ?? [],
+                'unread_count' => $unread_count ?? 0
+            ];
 
-        header('Content-Type: application/json');
-        echo json_encode($response);
+            // Gunakan CI output class - kompatibel dengan GZIP
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode($response));
+                
+        } catch (Exception $e) {
+            log_message('error', 'Notification error: ' . $e->getMessage());
+            
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'success' => false,
+                    'notifications' => [],
+                    'unread_count' => 0,
+                    'error' => 'Gagal memuat notifikasi'
+                ]));
+        }
     }
 
-    // Mark as read (AJAX)
+    /**
+     * Tandai satu notifikasi sebagai dibaca (AJAX)
+     */
     public function mark_read($id)
     {
-        if ($this->Notification_model->mark_read($id)) {
-            echo json_encode(['success' => true]);
-        } else {
-            echo json_encode(['success' => false]);
-        }
+        $success = $this->Notification_model->mark_read($id);
+        
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode(['success' => $success]));
     }
     
-    // Mark all as read (AJAX)
+    /**
+     * Tandai semua notifikasi sebagai dibaca (AJAX)
+     */
     public function mark_all_read()
     {
-        if ($this->Notification_model->mark_all_read()) {
-            echo json_encode(['success' => true]);
-        } else {
-            echo json_encode(['success' => false]);
-        }
+        $success = $this->Notification_model->mark_all_read();
+        
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode(['success' => $success]));
     }
 }

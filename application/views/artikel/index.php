@@ -21,7 +21,7 @@
         
         <!-- Featured Article (First) -->
         <?php if (isset($articles[0])): $featured = $articles[0]; ?>
-        <div class="mb-12">
+        <div class="mb-12 scroll-reveal">
             <a href="<?= base_url('artikel/' . $featured['slug']) ?>" class="group block">
                 <article class="relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 grid grid-cols-1 lg:grid-cols-2">
                     <div class="h-64 lg:h-96 overflow-hidden">
@@ -64,7 +64,7 @@
                 // Vary card sizes for visual interest
                 $isLarge = ($index % 5 === 0);
             ?>
-            <article class="group <?= $isLarge ? 'md:col-span-2 lg:col-span-1' : '' ?>">
+            <article class="group scroll-reveal <?= $isLarge ? 'md:col-span-2 lg:col-span-1' : '' ?>" style="transition-delay: <?= ($index % 6) * 0.1 ?>s">
                 <a href="<?= base_url('artikel/' . $article['slug']) ?>" class="block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full">
                     <div class="<?= $isLarge ? 'h-56' : 'h-48' ?> overflow-hidden relative">
                         <?php if (!empty($article['thumbnail'])): ?>
@@ -123,7 +123,7 @@
 <!-- Article Slider Section -->
 <section class="py-12 bg-white border-t border-slate-100">
     <div class="container mx-auto max-w-7xl px-4 lg:px-8">
-        <h3 class="text-2xl font-bold text-slate-900 mb-8 flex items-center gap-2">
+        <h3 class="text-2xl font-bold text-slate-900 mb-8 flex items-center gap-2 scroll-reveal">
              <span class="material-symbols-outlined text-primary">breaking_news_alt_1</span>
              Berita Sekilas
         </h3>

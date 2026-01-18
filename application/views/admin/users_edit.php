@@ -27,6 +27,9 @@
         </div>
         
         <form action="<?= base_url('admin/users/update/' . $user['id']) ?>" method="POST" class="p-6">
+            <!-- CSRF Token -->
+            <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
+            
             <div class="space-y-5">
                 <!-- Nama -->
                 <div class="space-y-1.5">

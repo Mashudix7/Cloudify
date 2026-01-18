@@ -15,7 +15,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Legend -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 mb-6">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 mb-6 scroll-reveal">
             <div class="flex flex-wrap items-center gap-6 justify-center">
                 <span class="text-sm font-semibold text-slate-700">Keterangan:</span>
                 <div class="flex items-center gap-2">
@@ -38,12 +38,12 @@
         </div>
         
         <!-- Map Container -->
-        <div class="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden scroll-reveal delay-100">
             <div id="weather-map" class="w-full h-[600px]"></div>
         </div>
         
         <!-- Area Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-6 scroll-reveal delay-200">
             <?php 
             $areas = [
                 ['name' => 'Jakarta Pusat', 'temp' => 32, 'weather' => 'Cerah Berawan', 'icon' => 'partly_cloudy_day', 'color' => 'text-yellow-500'],

@@ -24,6 +24,23 @@
         .animate-float{animation:float 6s ease-in-out infinite}
         @keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
         .animate-slide-down{animation:slideDown .4s ease-out forwards}
+        /* Navbar scroll states - Glassmorphism on hero */
+        .nav-transparent .glass-nav{background:rgba(255,255,255,.15)!important;backdrop-filter:blur(12px)!important;-webkit-backdrop-filter:blur(12px)!important;border-color:rgba(255,255,255,.25)!important;box-shadow:0 4px 30px rgba(0,0,0,.1)!important}
+        .nav-transparent .logo-text,.nav-transparent .nav-link,.nav-transparent .search-btn{color:#fff!important}
+        .nav-transparent .nav-link:hover{color:rgba(255,255,255,.8)!important}
+        .nav-transparent .menu-btn{background:rgba(255,255,255,.2)!important;border-color:rgba(255,255,255,.3)!important;color:#fff!important}
+        .nav-transparent .glass-nav .flex.size-8{background:linear-gradient(135deg,rgba(255,255,255,.3),rgba(255,255,255,.1))!important}
+        #main-header{transition:all .4s cubic-bezier(.4,0,.2,1)}
+        /* Scroll Reveal Animations (GPU Accelerated) */
+        .scroll-reveal{opacity:0;transform:translateY(30px);transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+        .scroll-reveal.revealed{opacity:1;transform:translateY(0)}
+        .scroll-reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+        .scroll-reveal-left.revealed{opacity:1;transform:translateX(0)}
+        .scroll-reveal-right{opacity:0;transform:translateX(40px);transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+        .scroll-reveal-right.revealed{opacity:1;transform:translateX(0)}
+        .scroll-reveal-scale{opacity:0;transform:scale(.9);transition:opacity .5s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+        .scroll-reveal-scale.revealed{opacity:1;transform:scale(1)}
+        .delay-100{transition-delay:.1s}.delay-200{transition-delay:.2s}.delay-300{transition-delay:.3s}.delay-400{transition-delay:.4s}
     </style>
     
     <!-- Fonts (non-blocking with display=swap) -->
@@ -41,8 +58,8 @@
     <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
         
 
-        <!-- Navbar (Floating Blue Glass) -->
-        <header id="main-header" class="fixed top-4 left-0 right-0 z-50 px-4 lg:px-8 transition-all duration-300">
+        <!-- Navbar (Floating Glass with Scroll Effect) -->
+        <header id="main-header" class="fixed top-4 left-0 right-0 z-50 px-4 lg:px-8 nav-transparent" data-scroll-nav>
             <div class="mx-auto max-w-7xl glass-nav rounded-2xl h-14 lg:h-16 flex items-center justify-between px-4 lg:px-6">
                 <div class="flex items-center gap-6 lg:gap-10">
                     <!-- Logo -->

@@ -1,0 +1,34 @@
+# Folder Uploads - Security Rules
+# File ini mencegah eksekusi script berbahaya di folder uploads
+
+# Disable script execution
+<FilesMatch "\.(php|php5|phtml|pl|py|cgi|asp|aspx|jsp|sh|bash)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Disable directory listing
+Options -Indexes
+
+# Only allow specific image file types
+<FilesMatch "\.(?i:gif|jpe?g|png|webp|ico|svg)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+# Set proper MIME types for images
+<IfModule mod_mime.c>
+    AddType image/gif .gif
+    AddType image/jpeg .jpg .jpeg
+    AddType image/png .png
+    AddType image/webp .webp
+    AddType image/svg+xml .svg
+</IfModule>
+
+# Disable PHP engine in this directory
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>

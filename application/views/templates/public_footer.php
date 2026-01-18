@@ -69,6 +69,72 @@
         </footer>
         
     </div>
+
+    <!-- Smooth Scroll Animations (Performance Optimized) -->
+    <script>
+    (function() {
+        'use strict';
+        
+        // Navbar Scroll Effect - Uses requestAnimationFrame for smooth 60fps
+        const header = document.getElementById('main-header');
+        if (header && header.hasAttribute('data-scroll-nav')) {
+            let ticking = false;
+            let lastScrollY = 0;
+            
+            // Threshold: when to switch navbar style (after hero section)
+            const getThreshold = () => {
+                const hero = document.querySelector('section.bg-hero-gradient');
+                return hero ? hero.offsetHeight - 100 : 300;
+            };
+            
+            const updateNav = () => {
+                const scrollY = window.scrollY || window.pageYOffset;
+                const threshold = getThreshold();
+                
+                if (scrollY > threshold) {
+                    header.classList.remove('nav-transparent');
+                } else {
+                    header.classList.add('nav-transparent');
+                }
+                ticking = false;
+            };
+            
+            const onScroll = () => {
+                lastScrollY = window.scrollY;
+                if (!ticking) {
+                    window.requestAnimationFrame(updateNav);
+                    ticking = true;
+                }
+            };
+            
+            window.addEventListener('scroll', onScroll, { passive: true });
+            updateNav(); // Initial check
+        }
+        
+        // Scroll Reveal using Intersection Observer (Very Performant)
+        const revealElements = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale');
+        
+        if (revealElements.length > 0 && 'IntersectionObserver' in window) {
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        revealObserver.unobserve(entry.target); // Stop observing once revealed
+                    }
+                });
+            }, {
+                root: null,
+                rootMargin: '0px 0px -50px 0px',
+                threshold: 0.1
+            });
+            
+            revealElements.forEach(el => revealObserver.observe(el));
+        } else {
+            // Fallback: reveal all immediately
+            revealElements.forEach(el => el.classList.add('revealed'));
+        }
+    })();
+    </script>
 </body>
 </html>
 

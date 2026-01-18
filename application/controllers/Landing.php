@@ -126,7 +126,8 @@ class Landing extends CI_Controller {
             'title' => $article['title'],
             'active_menu' => 'artikel',
             'article' => $article,
-            'admin_name' => 'Cloudify Admin',
+            // Gunakan nama author dari database, fallback ke 'Admin' jika kosong
+            'admin_name' => $article['author_name'] ?? 'Admin',
             'reaction_counts' => $reaction_counts,
             'user_reaction' => $user_reaction
         ];

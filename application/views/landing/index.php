@@ -10,7 +10,7 @@
     
     <div class="container mx-auto px-4 lg:px-8 relative z-10 flex flex-col items-center">
         <!-- Main Weather Card (compact on mobile) -->
-        <div class="glass-card w-full max-w-4xl rounded-2xl md:rounded-3xl p-5 md:p-10 text-white transition-all hover:translate-y-[-4px] duration-500 animate-fade-in-up">
+        <div class="glass-card w-full max-w-4xl rounded-2xl md:rounded-3xl p-5 md:p-10 text-white transition-all hover:translate-y-[-4px] duration-500 scroll-reveal">
             <div class="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-10">
                 <!-- Weather Info -->
                 <div class="flex flex-1 flex-col items-center md:items-start text-center md:text-left" id="hero-weather-info">
@@ -83,7 +83,7 @@
 <section class="relative z-20 bg-background-light px-4 py-12 lg:px-8">
     <div class="mx-auto max-w-7xl space-y-12">
         <div>
-            <div class="flex items-center justify-between mb-6 px-2">
+            <div class="flex items-center justify-between mb-6 px-2 scroll-reveal">
                 <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
                     <span class="material-symbols-outlined text-primary">schedule</span>
                     Prakiraan Per Jam
@@ -141,7 +141,7 @@
         <!-- 7-Day Forecast & Live Radar -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- 7-Day Forecast -->
-            <div class="bg-gradient-to-br from-blue-50 via-sky-50 to-white rounded-3xl p-6 lg:p-8 shadow-sm border border-blue-100/50 animate-fade-in-up">
+            <div class="bg-gradient-to-br from-blue-50 via-sky-50 to-white rounded-3xl p-6 lg:p-8 shadow-sm border border-blue-100/50 scroll-reveal-left">
                 <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
                     <span class="material-symbols-outlined text-primary">calendar_month</span>
                     Prakiraan 7 Hari
@@ -168,7 +168,7 @@
             </div>
             
             <!-- Map Card - Interactive (Lazy Loaded) -->
-            <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden animate-fade-in-up delay-200">
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden scroll-reveal-right delay-100">
                 <!-- Header Above Map -->
                 <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
                     <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
@@ -238,7 +238,7 @@
         </div>
         
         <!-- Air Quality -->
-        <div class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 rounded-3xl p-6 md:p-8 text-white flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative overflow-hidden animate-fade-in-up delay-300 shadow-lg shadow-blue-500/20">
+        <div class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 rounded-3xl p-6 md:p-8 text-white flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative overflow-hidden scroll-reveal delay-200 shadow-lg shadow-blue-500/20">
             <div class="absolute right-0 top-0 h-full w-1/3 bg-white/10 skew-x-12 transform origin-bottom-left"></div>
             <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
             <div class="relative z-10">
@@ -256,7 +256,7 @@
 <!-- Articles Section -->
 <section class="relative z-20 bg-background-light px-4 pb-24 lg:px-8">
     <div class="mx-auto max-w-6xl">
-        <div class="flex items-center justify-between mb-10">
+        <div class="flex items-center justify-between mb-10 scroll-reveal">
             <h3 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
                 <span class="material-symbols-outlined text-primary">article</span>
                 Artikel Cuaca

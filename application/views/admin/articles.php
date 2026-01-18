@@ -129,6 +129,9 @@
                 
                 <!-- Form Fields -->
                 <form action="<?= base_url('admin/articles/store') ?>" method="POST" enctype="multipart/form-data" class="p-6 flex flex-col gap-5">
+                    <!-- CSRF Token -->
+                    <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
+                    
                     <!-- Judul -->
                     <div class="space-y-1.5">
                         <label class="text-xs font-semibold text-slate-700 uppercase tracking-wide ml-1">Judul Artikel</label>
@@ -148,10 +151,14 @@
                         <p class="text-[10px] text-slate-500 ml-1">Format: JPG, PNG, GIF. Maks 2MB.</p>
                     </div>
                     
-                    <!-- Konten -->
+                    <!-- Konten dengan Quill.js Rich Text Editor -->
                     <div class="space-y-1.5">
                         <label class="text-xs font-semibold text-slate-700 uppercase tracking-wide ml-1">Isi Konten</label>
-                        <textarea class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all placeholder:text-slate-400 resize-none h-32" placeholder="Tulis isi artikel di sini..." name="content" required></textarea>
+                        <!-- Quill Editor Container -->
+                        <div id="quill-editor" class="bg-white border border-slate-200 rounded-xl overflow-hidden" style="min-height: 200px;"></div>
+                        <!-- Hidden input untuk mengirim konten ke server -->
+                        <input type="hidden" name="content" id="content-input">
+                        <p class="text-[10px] text-slate-500 ml-1">Gunakan toolbar untuk format teks: Bold, Italic, Heading, List, Link, dll.</p>
                     </div>
                     
                     <!-- Tags -->
@@ -192,3 +199,101 @@
 </div>
 
 <?php $this->load->view('templates/admin_footer'); ?>
+
+<!-- Quill.js Rich Text Editor -->
+<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+
+<script>
+/**
+ * Inisialisasi Quill Rich Text Editor
+ * 
+ * Editor ini mendukung formatting:
+ * - Bold, Italic, Underline, Strikethrough
+ * - Heading (H1, H2, H3)
+ * - Bullet dan Numbered List
+ * - Blockquote dan Code Block
+ * - Link
+ */
+document.addEventListener('DOMContentLoaded', function() {
+    // Konfigurasi toolbar Quill
+    var toolbarOptions = [
+        // Heading dropdown
+        [{ 'header': [1, 2, 3, false] }],
+        
+        // Text formatting
+        ['bold', 'italic', 'underline', 'strike'],
+        
+        // List
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+        
+        // Blocks
+        ['blockquote', 'code-block'],
+        
+        // Link
+        ['link'],
+        
+        // Clear formatting
+        ['clean']
+    ];
+    
+    // Inisialisasi Quill editor
+    var quill = new Quill('#quill-editor', {
+        modules: {
+            toolbar: toolbarOptions
+        },
+        placeholder: 'Tulis isi artikel di sini...',
+        theme: 'snow'
+    });
+    
+    // Sinkronkan konten Quill ke hidden input sebelum form submit
+    var form = document.querySelector('form[action*="articles/store"]');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            var contentInput = document.getElementById('content-input');
+            // Ambil HTML dari Quill editor
+            contentInput.value = quill.root.innerHTML;
+            
+            // Validasi: pastikan konten tidak kosong
+            if (quill.getText().trim().length === 0) {
+                e.preventDefault();
+                alert('Isi konten artikel tidak boleh kosong!');
+                return false;
+            }
+        });
+    }
+});
+</script>
+
+<style>
+/* Custom styling untuk Quill Editor agar match dengan tema admin */
+.ql-toolbar.ql-snow {
+    border: none;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f8fafc;
+    border-radius: 0.75rem 0.75rem 0 0;
+}
+.ql-container.ql-snow {
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    min-height: 150px;
+}
+.ql-editor {
+    padding: 1rem;
+}
+.ql-editor.ql-blank::before {
+    font-style: normal;
+    color: #94a3b8;
+}
+#quill-editor {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+#quill-editor:focus-within {
+    border-color: #3bb2f7;
+    box-shadow: 0 0 0 3px rgba(59, 178, 247, 0.2);
+}
+</style>
+

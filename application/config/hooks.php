@@ -5,9 +5,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | -------------------------------------------------------------------------
 | Hooks
 | -------------------------------------------------------------------------
-| This file lets you define "hooks" to extend CI without hacking the core
-| files.  Please see the user guide for info:
+| Hooks memungkinkan kita untuk menjalankan kode pada titik tertentu
+| dalam siklus eksekusi CodeIgniter.
 |
-|	https://codeigniter.com/userguide3/general/hooks.html
-|
+| Untuk mengaktifkan hooks, set $config['enable_hooks'] = TRUE di config.php
 */
+
+/**
+ * Security Headers Hook
+ * 
+ * Dijalankan setelah controller constructor untuk menambahkan
+ * HTTP security headers ke setiap response.
+ */
+$hook['post_controller_constructor'][] = array(
+    'class'    => 'SecurityHeaders',
+    'function' => 'set_headers',
+    'filename' => 'SecurityHeaders.php',
+    'filepath' => 'hooks'
+);

@@ -80,6 +80,9 @@
                 <?php endif; ?>
                 
                 <form action="<?= base_url('auth/do_login') ?>" method="POST" class="flex flex-col gap-5">
+                    <!-- CSRF Token untuk keamanan -->
+                    <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
+                    
                     <!-- Email -->
                     <div class="space-y-2">
                         <label class="text-sm font-semibold text-slate-700 block" for="email">Email</label>

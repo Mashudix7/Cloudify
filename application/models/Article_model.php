@@ -34,10 +34,15 @@ class Article_model extends CI_Model {
         return $this->db->get_where('articles', ['id' => $id])->row_array();
     }
 
-    // Get article by Slug (for public view)
+    // Get article by Slug (for public view) with author name
     public function get_by_slug($slug)
     {
-        return $this->db->get_where('articles', ['slug' => $slug])->row_array();
+        // Join dengan tabel admins untuk mendapatkan nama author
+        $this->db->select('articles.*, admins.name as author_name');
+        $this->db->from('articles');
+        $this->db->join('admins', 'admins.id = articles.author_id', 'left');
+        $this->db->where('articles.slug', $slug);
+        return $this->db->get()->row_array();
     }
 
     // Create new article

@@ -106,6 +106,9 @@
                 
                 <!-- Form Fields -->
                 <form action="<?= base_url('admin/users/store') ?>" method="POST" class="p-6 flex flex-col gap-5">
+                    <!-- CSRF Token -->
+                    <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
+                    
                     <!-- Nama -->
                     <div class="space-y-1.5">
                         <label class="text-xs font-semibold text-slate-700 uppercase tracking-wide ml-1">Nama Lengkap</label>

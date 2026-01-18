@@ -50,6 +50,15 @@ class Articles extends CI_Controller {
         if (!empty($_FILES['thumbnail']['name'])) {
             if ($this->upload->do_upload('thumbnail')) {
                 $uploadData = $this->upload->data();
+                
+                // KEAMANAN: Validasi MIME type sebenarnya
+                if (!$this->_validate_image_mime($uploadData['full_path'])) {
+                    unlink($uploadData['full_path']); // Hapus file berbahaya
+                    $this->session->set_flashdata('error', 'File yang diupload bukan gambar valid!');
+                    redirect('admin/articles');
+                    return;
+                }
+                
                 $thumbnail = 'uploads/' . $uploadData['file_name'];
                 
                 // Compress Image
@@ -62,7 +71,8 @@ class Articles extends CI_Controller {
 
         $data = [
             'title' => $title,
-            'content' => $this->input->post('content'),
+            // KEAMANAN: Sanitasi HTML dari rich text editor untuk mencegah XSS
+            'content' => sanitize_html($this->input->post('content')),
             'thumbnail' => $thumbnail,
             'tags' => $this->input->post('tags'),
             'status' => $this->input->post('status_btn') === 'draft' ? 'draft' : 'published',
@@ -155,7 +165,8 @@ class Articles extends CI_Controller {
 
         $data = [
             'title' => $this->input->post('title'),
-            'content' => $this->input->post('content'),
+            // KEAMANAN: Sanitasi HTML dari rich text editor untuk mencegah XSS
+            'content' => sanitize_html($this->input->post('content')),
             'thumbnail' => $thumbnail,
             'tags' => $this->input->post('tags'),
             'status' => $this->input->post('status_btn') === 'draft' ? 'draft' : 'published'
@@ -203,5 +214,42 @@ class Articles extends CI_Controller {
         
         $this->image_lib->clear();
         return true;
+    }
+    
+    /**
+     * Validasi MIME type sebenarnya dari file gambar
+     * 
+     * Mencegah upload file berbahaya yang disamarkan sebagai gambar
+     * 
+     * @param string $file_path Path lengkap ke file
+     * @return bool TRUE jika file adalah gambar valid
+     */
+    private function _validate_image_mime($file_path)
+    {
+        // Daftar MIME type gambar yang diizinkan
+        $allowed_mimes = [
+            'image/gif',
+            'image/jpeg',
+            'image/png',
+            'image/webp'
+        ];
+        
+        // Gunakan finfo untuk mendapatkan MIME type sebenarnya
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mime = $finfo->file($file_path);
+        
+        if (!in_array($mime, $allowed_mimes)) {
+            log_message('error', 'Invalid MIME type detected: ' . $mime);
+            return FALSE;
+        }
+        
+        // Double check dengan getimagesize
+        $image_info = @getimagesize($file_path);
+        if ($image_info === FALSE) {
+            log_message('error', 'File is not a valid image');
+            return FALSE;
+        }
+        
+        return TRUE;
     }
 }
