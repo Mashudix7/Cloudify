@@ -33,13 +33,60 @@ class Landing extends CI_Controller {
 
     public function api_weather()
     {
-        // Simulate API delay if needed, or just return data
+        // Weather data for 5 DKI Jakarta cities
         $data = [
             'lokasi' => [
-                'desa' => 'Menteng',
                 'provinsi' => 'DKI Jakarta',
-                'kotkab' => 'Jakarta Pusat'
+                'deskripsi' => '5 Kota di DKI Jakarta'
             ],
+            'cities' => [
+                'jakarta-pusat' => [
+                    'name' => 'Jakarta Pusat',
+                    't' => 32,
+                    'weather_desc' => 'Cerah Berawan',
+                    'icon' => 'partly_cloudy_day',
+                    'hu' => 65,
+                    'ws' => 12,
+                    'tp' => 0
+                ],
+                'jakarta-utara' => [
+                    'name' => 'Jakarta Utara',
+                    't' => 31,
+                    'weather_desc' => 'Berawan',
+                    'icon' => 'cloud',
+                    'hu' => 70,
+                    'ws' => 15,
+                    'tp' => 0
+                ],
+                'jakarta-barat' => [
+                    'name' => 'Jakarta Barat',
+                    't' => 30,
+                    'weather_desc' => 'Hujan Ringan',
+                    'icon' => 'rainy',
+                    'hu' => 80,
+                    'ws' => 10,
+                    'tp' => 5
+                ],
+                'jakarta-selatan' => [
+                    'name' => 'Jakarta Selatan',
+                    't' => 29,
+                    'weather_desc' => 'Hujan Lebat',
+                    'icon' => 'thunderstorm',
+                    'hu' => 85,
+                    'ws' => 18,
+                    'tp' => 15
+                ],
+                'jakarta-timur' => [
+                    'name' => 'Jakarta Timur',
+                    't' => 31,
+                    'weather_desc' => 'Cerah',
+                    'icon' => 'wb_sunny',
+                    'hu' => 60,
+                    'ws' => 8,
+                    'tp' => 0
+                ]
+            ],
+            // Default to Jakarta Pusat for main display
             'cuaca_sekarang' => [
                 't' => 31,
                 'weather_desc' => 'Cerah Berawan',

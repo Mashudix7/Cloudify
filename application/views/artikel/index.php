@@ -1,7 +1,7 @@
 <?php $this->load->view('templates/public_header', ['title' => 'Artikel Cuaca', 'active_menu' => 'artikel']); ?>
 
 <!-- Hero Banner (extends behind navbar for seamless gradient) -->
-<section class="relative bg-hero-gradient pt-36 pb-20 overflow-hidden -mt-24 lg:-mt-28">
+<section class="relative bg-hero-gradient-dark pt-36 pb-20 overflow-hidden -mt-24 lg:-mt-28">
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
         <div class="absolute -top-40 -right-40 h-[400px] w-[400px] rounded-full bg-white/10 blur-3xl"></div>
         <div class="absolute bottom-0 -left-20 h-[300px] w-[300px] rounded-full bg-blue-400/20 blur-3xl"></div>
@@ -19,80 +19,28 @@
         
         <?php if (!empty($articles)): ?>
         
-        <!-- Featured Article (First) -->
-        <?php if (isset($articles[0])): $featured = $articles[0]; ?>
-        <div class="mb-12 scroll-reveal">
-            <a href="<?= base_url('artikel/' . $featured['slug']) ?>" class="group block">
-                <article class="relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 grid grid-cols-1 lg:grid-cols-2">
-                    <div class="h-64 lg:h-96 overflow-hidden">
-                        <?php if (!empty($featured['thumbnail'])): ?>
-                        <img src="<?= base_url($featured['thumbnail']) ?>" alt="<?= htmlspecialchars($featured['title']) ?>" width="600" height="400" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                        <?php else: ?>
-                        <div class="w-full h-full bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-white/30 text-9xl">article</span>
-                        </div>
-                        <?php endif; ?>
-                    </div>
-                    <div class="p-8 lg:p-12 flex flex-col justify-center">
-                        <span class="inline-flex items-center gap-1 w-fit px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-4">
-                            <span class="material-symbols-outlined text-sm">local_fire_department</span>
-                            Terbaru
-                        </span>
-                        <h2 class="text-2xl lg:text-3xl font-bold text-slate-900 mb-4 group-hover:text-primary transition-colors"><?= htmlspecialchars($featured['title']) ?></h2>
-                        <p class="text-slate-500 mb-6 line-clamp-3"><?= strip_tags(substr($featured['content'], 0, 200)) ?>...</p>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2 text-sm text-slate-400">
-                                <span class="material-symbols-outlined text-lg">calendar_today</span>
-                                <?= date('d M Y', strtotime($featured['created_at'])) ?>
-                            </div>
-                            <span class="flex items-center gap-2 text-primary font-semibold group-hover:gap-3 transition-all">
-                                Baca Selengkapnya
-                                <span class="material-symbols-outlined">arrow_forward</span>
-                            </span>
-                        </div>
-                    </div>
-                </article>
-            </a>
-        </div>
-        <?php endif; ?>
-        
-        <!-- Articles Grid (Masonry-like) -->
+        <!-- 3-Column Grid Layout -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            <?php 
-            $remaining = array_slice($articles, 1);
-            foreach ($remaining as $index => $article): 
-                // Vary card sizes for visual interest
-                $isLarge = ($index % 5 === 0);
-            ?>
-            <article class="group scroll-reveal <?= $isLarge ? 'md:col-span-2 lg:col-span-1' : '' ?>" style="transition-delay: <?= ($index % 6) * 0.1 ?>s">
-                <a href="<?= base_url('artikel/' . $article['slug']) ?>" class="block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full">
-                    <div class="<?= $isLarge ? 'h-56' : 'h-48' ?> overflow-hidden relative">
+            <?php foreach ($articles as $index => $article): ?>
+            <article class="group scroll-reveal" style="transition-delay: <?= ($index % 6) * 0.1 ?>s">
+                <a href="<?= base_url('artikel/' . $article['slug']) ?>" class="block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full border border-slate-100">
+                    <div class="h-48 overflow-hidden relative">
                         <?php if (!empty($article['thumbnail'])): ?>
                         <img src="<?= base_url($article['thumbnail']) ?>" alt="<?= htmlspecialchars($article['title']) ?>" width="400" height="250" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy">
                         <?php else: ?>
-                        <div class="w-full h-full bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-slate-400 text-6xl">image</span>
-                        </div>
-                        <?php endif; ?>
-                        
-                        <!-- Tag Badge -->
-                        <?php if (!empty($article['tags'])): ?>
-                        <div class="absolute top-4 left-4">
-                            <span class="px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-bold text-slate-700">
-                                <?= explode(',', $article['tags'])[0] ?>
-                            </span>
+                        <div class="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-white/30 text-6xl">image</span>
                         </div>
                         <?php endif; ?>
                     </div>
                     
-                    <div class="p-6">
-                        <div class="flex items-center gap-2 text-xs text-slate-400 mb-3">
-                            <span><?= date('d M Y', strtotime($article['created_at'])) ?></span>
-                            <span class="w-1 h-1 rounded-full bg-slate-300"></span>
-                            <span>5 min read</span>
-                        </div>
-                        <h3 class="text-lg font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors line-clamp-2"><?= htmlspecialchars($article['title']) ?></h3>
-                        <p class="text-sm text-slate-500 line-clamp-2"><?= strip_tags(substr($article['content'], 0, 100)) ?>...</p>
+                    <div class="p-5">
+                        <span class="text-primary text-sm font-medium"><?= date('d F Y', strtotime($article['created_at'])) ?></span>
+                        <h3 class="text-lg font-bold text-slate-900 mt-2 mb-3 group-hover:text-primary transition-colors line-clamp-2"><?= htmlspecialchars($article['title']) ?></h3>
+                        <span class="inline-flex items-center gap-1 text-primary font-semibold text-sm group-hover:gap-2 transition-all">
+                            Baca selengkapnya
+                            <span class="material-symbols-outlined text-base">arrow_forward</span>
+                        </span>
                     </div>
                 </a>
             </article>

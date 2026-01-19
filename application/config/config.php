@@ -414,7 +414,7 @@ $config['sess_regenerate_destroy'] = TRUE;
 $config['cookie_prefix']	= 'cloudify_';
 $config['cookie_domain']	= '';
 $config['cookie_path']		= '/';
-$config['cookie_secure']	= TRUE;
+$config['cookie_secure']	= FALSE; // Set TRUE for production with HTTPS
 $config['cookie_httponly'] 	= TRUE;
 $config['cookie_samesite'] 	= 'Strict';
 

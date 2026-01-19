@@ -73,7 +73,7 @@
                     <!-- Nav Links -->
                     <nav class="hidden md:flex items-center gap-5 lg:gap-6">
                         <a class="nav-link <?= ($active_menu ?? '') === 'home' ? 'nav-active text-blue-600' : 'text-slate-600 hover:text-blue-600' ?> text-sm font-medium transition-colors" href="<?= base_url() ?>">Beranda</a>
-                        <a class="nav-link <?= ($active_menu ?? '') === 'cuaca' ? 'nav-active text-blue-600' : 'text-slate-600 hover:text-blue-600' ?> text-sm font-medium transition-colors" href="<?= base_url('peta-cuaca') ?>">Cuaca Daerah</a>
+                        <a class="nav-link <?= ($active_menu ?? '') === 'cuaca' ? 'nav-active text-blue-600' : 'text-slate-600 hover:text-blue-600' ?> text-sm font-medium transition-colors" href="<?= base_url('peta-cuaca') ?>">Cuaca DKI Jakarta</a>
                         <a class="nav-link <?= ($active_menu ?? '') === 'artikel' ? 'nav-active text-blue-600' : 'text-slate-600 hover:text-blue-600' ?> text-sm font-medium transition-colors" href="<?= base_url('artikel') ?>">Artikel</a>
                     </nav>
                 </div>
@@ -109,7 +109,7 @@
                     <span class="material-symbols-outlined text-blue-500">home</span> Beranda
                 </a>
                 <a class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 transition-colors text-slate-700 font-medium" href="<?= base_url('peta-cuaca') ?>">
-                    <span class="material-symbols-outlined text-blue-500">map</span> Cuaca Daerah
+                    <span class="material-symbols-outlined text-blue-500">map</span> Cuaca DKI Jakarta
                 </a>
                 <a class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 transition-colors text-slate-700 font-medium" href="<?= base_url('artikel') ?>">
                     <span class="material-symbols-outlined text-blue-500">article</span> Artikel

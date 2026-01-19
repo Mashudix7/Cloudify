@@ -1,7 +1,7 @@
 <?php $this->load->view('templates/public_header', ['active_menu' => 'home']); ?>
 
 <!-- Hero Section (compact for mobile, extends behind navbar) -->
-<section class="relative flex w-full flex-col items-center justify-center bg-hero-gradient pb-12 pt-28 lg:min-h-[85vh] lg:pb-24 lg:pt-36 -mt-24 lg:-mt-28">
+<section class="relative flex w-full flex-col items-center justify-center bg-hero-gradient-dark pb-12 pt-28 lg:min-h-[85vh] lg:pb-24 lg:pt-36 -mt-24 lg:-mt-28">
     <!-- Background Effects -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
         <div class="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-white/10 blur-3xl"></div>
@@ -141,9 +141,9 @@
         <!-- 7-Day Forecast & Live Radar -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- 7-Day Forecast -->
-            <div class="bg-gradient-to-br from-blue-50 via-sky-50 to-white rounded-3xl p-6 lg:p-8 shadow-sm border border-blue-100/50 scroll-reveal-left">
-                <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-primary">calendar_month</span>
+            <div class="glass-forecast rounded-3xl p-6 lg:p-8 scroll-reveal-left text-white">
+                <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-white/90">calendar_month</span>
                     Prakiraan 7 Hari
                 </h3>
                 <div class="space-y-4">
@@ -151,15 +151,15 @@
                     <!-- Skeleton Loader (4 items) -->
                     <?php for($i=0; $i<4; $i++): ?>
                     <div class="flex items-center justify-between group rounded-xl p-2 -mx-2 animate-pulse">
-                        <div class="w-20 h-5 bg-slate-100 rounded"></div>
+                        <div class="w-20 h-5 bg-white/20 rounded"></div>
                         <div class="flex items-center gap-3 w-32">
-                            <div class="size-6 bg-slate-100 rounded-full"></div>
-                            <div class="w-20 h-5 bg-slate-100 rounded"></div>
+                            <div class="size-6 bg-white/20 rounded-full"></div>
+                            <div class="w-20 h-5 bg-white/20 rounded"></div>
                         </div>
                         <div class="flex items-center gap-4 flex-1 justify-end">
-                            <div class="w-8 h-5 bg-slate-100 rounded"></div>
-                            <div class="w-24 h-2 bg-slate-100 rounded-full"></div>
-                            <div class="w-8 h-5 bg-slate-100 rounded"></div>
+                            <div class="w-8 h-5 bg-white/20 rounded"></div>
+                            <div class="w-24 h-2 bg-white/20 rounded-full"></div>
+                            <div class="w-8 h-5 bg-white/20 rounded"></div>
                         </div>
                     </div>
                     <?php endfor; ?>
@@ -201,38 +201,48 @@
                 const mapEl = document.getElementById('landing-map');
                 mapEl.classList.remove('hidden');
                 
-                // Load Leaflet dynamically
+                // Load Leaflet CSS first
                 const link = document.createElement('link');
                 link.rel = 'stylesheet';
                 link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-                document.head.appendChild(link);
-                
-                const script = document.createElement('script');
-                script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-                script.onload = function() {
-                    const map = L.map('landing-map', { zoomControl: false, attributionControl: false }).setView([-6.2088, 106.8456], 11);
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-                    
-                    const weatherData = [
-                        { lat: -6.1862, lng: 106.8340, temp: 32, icon: '🌤️' },
-                        { lat: -6.1384, lng: 106.8633, temp: 31, icon: '☁️' },
-                        { lat: -6.1676, lng: 106.7637, temp: 30, icon: '🌧️' },
-                        { lat: -6.2615, lng: 106.8106, temp: 29, icon: '⛈️' },
-                        { lat: -6.2250, lng: 106.9004, temp: 31, icon: '☀️' }
-                    ];
-                    
-                    weatherData.forEach(d => {
-                        L.marker([d.lat, d.lng], {
-                            icon: L.divIcon({
-                                className: 'bg-transparent',
-                                html: '<div style="background:white;border-radius:8px;padding:4px 8px;box-shadow:0 2px 8px rgba(0,0,0,0.15);text-align:center;min-width:50px;"><div style="font-size:18px;">' + d.icon + '</div><div style="font-size:11px;font-weight:bold;color:#334155;">' + d.temp + '°</div></div>',
-                                iconSize: [50, 40],
-                                iconAnchor: [25, 40]
-                            })
-                        }).addTo(map);
-                    });
+                link.onload = function() {
+                    // Load Leaflet JS after CSS is loaded
+                    const script = document.createElement('script');
+                    script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+                    script.onload = function() {
+                        // Small delay to ensure everything is ready
+                        setTimeout(function() {
+                            const map = L.map('landing-map', { zoomControl: false, attributionControl: false }).setView([-6.2088, 106.8456], 11);
+                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                            
+                            // Fix tile rendering issue
+                            setTimeout(function() {
+                                map.invalidateSize();
+                            }, 100);
+                            
+                            const weatherData = [
+                                { lat: -6.1862, lng: 106.8340, temp: 32, icon: '🌤️' },
+                                { lat: -6.1384, lng: 106.8633, temp: 31, icon: '☁️' },
+                                { lat: -6.1676, lng: 106.7637, temp: 30, icon: '🌧️' },
+                                { lat: -6.2615, lng: 106.8106, temp: 29, icon: '⛈️' },
+                                { lat: -6.2250, lng: 106.9004, temp: 31, icon: '☀️' }
+                            ];
+                            
+                            weatherData.forEach(d => {
+                                L.marker([d.lat, d.lng], {
+                                    icon: L.divIcon({
+                                        className: 'bg-transparent',
+                                        html: '<div style="background:white;border-radius:8px;padding:4px 8px;box-shadow:0 2px 8px rgba(0,0,0,0.15);text-align:center;min-width:50px;"><div style="font-size:18px;">' + d.icon + '</div><div style="font-size:11px;font-weight:bold;color:#334155;">' + d.temp + '°</div></div>',
+                                        iconSize: [50, 40],
+                                        iconAnchor: [25, 40]
+                                    })
+                                }).addTo(map);
+                            });
+                        }, 50);
+                    };
+                    document.head.appendChild(script);
                 };
-                document.head.appendChild(script);
+                document.head.appendChild(link);
             }
             </script>
         </div>
@@ -256,16 +266,93 @@
 <!-- Articles Section -->
 <section class="relative z-20 bg-background-light px-4 pb-24 lg:px-8">
     <div class="mx-auto max-w-6xl">
-        <div class="flex items-center justify-between mb-10 scroll-reveal">
-            <h3 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary">article</span>
-                Artikel Cuaca
-            </h3>
-            <a class="text-primary font-semibold text-sm hover:underline" href="<?= base_url('artikel') ?>">Lihat Semua</a>
+        <div class="text-center mb-10 scroll-reveal">
+            <span class="text-primary font-semibold text-sm uppercase tracking-wider">BERITA</span>
+            <h3 class="text-3xl font-bold text-slate-900 mt-2">Berita Terbaru</h3>
+            <p class="text-slate-500 mt-2">Berita Utama, Kegiatan, dan Daerah Terbaru dari BMKG</p>
         </div>
         
-        <!-- Article Slider (Swiper) -->
-        <?php $this->load->view('templates/article_swiper', ['articles' => $articles]); ?>
+        <?php if (!empty($articles)): ?>
+        <!-- Desktop Layout: Featured + Grid -->
+        <div class="hidden lg:grid lg:grid-cols-2 gap-8">
+            <!-- Featured Article (Left) -->
+            <?php if (isset($articles[0])): $featured = $articles[0]; ?>
+            <div class="scroll-reveal">
+                <a href="<?= base_url('artikel/' . $featured['slug']) ?>" class="group block">
+                    <article class="article-card-featured h-full">
+                        <div class="h-80 overflow-hidden relative">
+                            <?php if (!empty($featured['thumbnail'])): ?>
+                            <img src="<?= base_url($featured['thumbnail']) ?>" alt="<?= htmlspecialchars($featured['title']) ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <?php else: ?>
+                            <div class="w-full h-full bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-white/30 text-9xl">article</span>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="p-6">
+                            <span class="text-primary text-sm font-medium"><?= date('d F Y', strtotime($featured['created_at'])) ?></span>
+                            <h4 class="text-xl font-bold text-slate-900 mt-2 mb-3 group-hover:text-primary transition-colors line-clamp-2"><?= htmlspecialchars($featured['title']) ?></h4>
+                            <p class="text-slate-500 text-sm mb-4 line-clamp-3"><?= strip_tags(substr($featured['content'], 0, 180)) ?>...</p>
+                            <span class="inline-flex items-center gap-2 text-primary font-semibold text-sm group-hover:gap-3 transition-all">
+                                Baca selengkapnya
+                                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                            </span>
+                        </div>
+                    </article>
+                </a>
+            </div>
+            <?php endif; ?>
+            
+            <!-- Small Articles (Right) -->
+            <div class="flex flex-col gap-6 scroll-reveal delay-100">
+                <?php 
+                $small_articles = array_slice($articles, 1, 2);
+                foreach ($small_articles as $article): 
+                ?>
+                <a href="<?= base_url('artikel/' . $article['slug']) ?>" class="group block">
+                    <article class="article-card-small">
+                        <div class="w-40 h-32 shrink-0 overflow-hidden">
+                            <?php if (!empty($article['thumbnail'])): ?>
+                            <img src="<?= base_url($article['thumbnail']) ?>" alt="<?= htmlspecialchars($article['title']) ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <?php else: ?>
+                            <div class="w-full h-full bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-slate-400 text-4xl">image</span>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="p-4 flex flex-col justify-center">
+                            <span class="text-primary text-xs font-medium"><?= date('d F Y', strtotime($article['created_at'])) ?></span>
+                            <h5 class="text-base font-bold text-slate-900 mt-1 group-hover:text-primary transition-colors line-clamp-2"><?= htmlspecialchars($article['title']) ?></h5>
+                            <span class="inline-flex items-center gap-1 text-primary font-medium text-sm mt-2 group-hover:gap-2 transition-all">
+                                Baca selengkapnya
+                                <span class="material-symbols-outlined text-base">arrow_forward</span>
+                            </span>
+                        </div>
+                    </article>
+                </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        
+        <!-- Mobile/Tablet: Swiper -->
+        <div class="lg:hidden">
+            <?php $this->load->view('templates/article_swiper', ['articles' => $articles]); ?>
+        </div>
+        
+        <!-- View More Button -->
+        <div class="text-center mt-10">
+            <a href="<?= base_url('artikel') ?>" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-blue-600 transition-colors shadow-lg shadow-primary/30">
+                Lihat Berita Daerah Lainnya
+            </a>
+        </div>
+        
+        <?php else: ?>
+        <div class="text-center py-16 text-slate-400">
+            <span class="material-symbols-outlined text-6xl mb-4">article</span>
+            <p class="text-lg font-medium">Belum ada artikel</p>
+            <p class="text-sm">Artikel akan muncul di sini setelah diterbitkan oleh admin.</p>
+        </div>
+        <?php endif; ?>
     </div>
 </section>
 
@@ -278,7 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update Hero
             if (data.lokasi) {
                 const locEl = document.getElementById('weather-location');
-                locEl.textContent = data.lokasi.desa + ', ' + data.lokasi.provinsi;
+                locEl.textContent = data.lokasi.provinsi;
                 locEl.className = 'text-white'; // Remove skeleton
             }
             if (data.cuaca_sekarang) {
@@ -320,18 +407,18 @@ document.addEventListener('DOMContentLoaded', () => {
                      const percent = 50 + index * 5;
                      const left = 10 + index * 3;
                      const html = `
-                    <div class="grid grid-cols-[70px_1fr_auto] md:grid-cols-[80px_140px_1fr] items-center gap-2 md:gap-4 p-3 rounded-xl bg-gradient-to-r from-white to-blue-50/50 border border-blue-100/30 mb-2 hover:shadow-sm transition-all" style="animation-delay: ${index * 100}ms">
-                        <span class="font-medium text-slate-600 text-sm">${w.day}</span>
+                    <div class="grid grid-cols-[70px_1fr_auto] md:grid-cols-[80px_140px_1fr] items-center gap-2 md:gap-4 p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 mb-2 hover:bg-white/20 transition-all" style="animation-delay: ${index * 100}ms">
+                        <span class="font-medium text-white/90 text-sm">${w.day}</span>
                         <div class="flex items-center gap-2">
-                            <span class="material-symbols-outlined ${w.color}">${w.icon}</span>
-                            <span class="text-sm font-medium text-slate-700 hidden md:inline">${w.desc}</span>
+                            <span class="material-symbols-outlined text-white">${w.icon}</span>
+                            <span class="text-sm font-medium text-white/80 hidden md:inline">${w.desc}</span>
                         </div>
                         <div class="flex items-center gap-2 md:gap-4 justify-end">
-                            <span class="text-xs md:text-sm font-medium text-slate-400">${w.low}°</span>
-                            <div class="relative w-16 md:w-24 h-2 bg-blue-100 rounded-full overflow-hidden">
-                                <div class="absolute top-0 h-full bg-gradient-to-r from-blue-400 to-sky-400 rounded-full" style="width: ${percent}%; left: ${left}%"></div>
+                            <span class="text-xs md:text-sm font-medium text-white/60">${w.low}°</span>
+                            <div class="relative w-16 md:w-24 h-2 bg-white/20 rounded-full overflow-hidden">
+                                <div class="absolute top-0 h-full bg-gradient-to-r from-white/60 to-white/90 rounded-full" style="width: ${percent}%; left: ${left}%"></div>
                             </div>
-                            <span class="text-xs md:text-sm font-bold text-slate-900">${w.high}°</span>
+                            <span class="text-xs md:text-sm font-bold text-white">${w.high}°</span>
                         </div>
                     </div>`;
                     list.insertAdjacentHTML('beforeend', html);

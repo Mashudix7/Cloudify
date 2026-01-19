@@ -1,13 +1,16 @@
 <?php $this->load->view('templates/public_header'); ?>
 
 <!-- Hero Section (extends behind navbar for seamless gradient) -->
-<section class="relative bg-hero-gradient py-12 pt-32 -mt-24 lg:-mt-28">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center text-white">
-            <h1 class="text-3xl md:text-4xl font-bold mb-2">Peta Cuaca DKI Jakarta</h1>
-            <p class="text-white/80">Pantau kondisi cuaca real-time di berbagai wilayah Jakarta</p>
-        </div>
+<section class="relative bg-hero-gradient-dark pt-36 pb-20 overflow-hidden -mt-24 lg:-mt-28">
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -right-40 h-[400px] w-[400px] rounded-full bg-white/10 blur-3xl"></div>
+        <div class="absolute bottom-0 -left-20 h-[300px] w-[300px] rounded-full bg-blue-400/20 blur-3xl"></div>
     </div>
+    <div class="container mx-auto px-4 lg:px-8 relative z-10 text-center">
+        <h1 class="text-4xl lg:text-5xl font-extrabold text-white mb-4 tracking-tight">Peta Cuaca DKI Jakarta</h1>
+        <p class="text-lg text-white/80 max-w-2xl mx-auto">Pantau kondisi cuaca real-time di berbagai wilayah Jakarta</p>
+    </div>
+    <div class="absolute bottom-0 w-full h-16 bg-slate-50 rounded-t-[50%] scale-x-110 translate-y-1/2"></div>
 </section>
 
 <!-- Map Section -->

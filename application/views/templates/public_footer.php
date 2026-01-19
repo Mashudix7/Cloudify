@@ -83,7 +83,7 @@
             
             // Threshold: when to switch navbar style (after hero section)
             const getThreshold = () => {
-                const hero = document.querySelector('section.bg-hero-gradient');
+                const hero = document.querySelector('section.bg-hero-gradient, section.bg-hero-gradient-dark');
                 return hero ? hero.offsetHeight - 100 : 300;
             };
             

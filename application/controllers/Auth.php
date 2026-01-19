@@ -118,7 +118,7 @@ class Auth extends CI_Controller {
     
     /**
      * Dapatkan informasi lockout dengan durasi progresif
-     * 
+     *  
      * @param string $ip IP address
      * @return array ['is_locked' => bool, 'remaining_minutes' => int]
      */
