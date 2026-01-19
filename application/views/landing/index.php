@@ -14,12 +14,21 @@
             <div class="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-10">
                 <!-- Weather Info -->
                 <div class="flex flex-1 flex-col items-center md:items-start text-center md:text-left" id="hero-weather-info">
-                    <div class="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs md:text-sm font-medium backdrop-blur-md mb-4 md:mb-6 border border-white/20 shadow-sm">
-                        <span class="material-symbols-outlined text-[16px]">near_me</span>
-                        <span>Lokasi</span>
+                    <!-- Location Carousel -->
+                    <div class="w-full mb-4 md:mb-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="material-symbols-outlined text-[16px] text-white/80">near_me</span>
+                            <span class="text-xs md:text-sm font-medium text-white/80">Pilih Wilayah</span>
+                        </div>
+                        <div id="location-carousel" class="flex overflow-x-auto no-scrollbar gap-2 pb-2 -mx-1 px-1 snap-x scroll-smooth">
+                            <!-- Skeleton pills -->
+                            <?php for($i=0; $i<5; $i++): ?>
+                            <div class="location-skeleton snap-start shrink-0 h-10 w-28 rounded-full bg-white/20 animate-pulse"></div>
+                            <?php endfor; ?>
+                        </div>
                     </div>
                     
-                    <!-- Location Skeleton -->
+                    <!-- Location Name -->
                     <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-2 text-white drop-shadow-sm w-full flex justify-center md:justify-start">
                         <span id="weather-location" class="animate-pulse bg-white/20 h-12 w-64 rounded-xl block"></span>
                     </h1>
@@ -78,6 +87,7 @@
     <!-- Curved Bottom -->
     <div class="absolute bottom-0 w-full h-16 bg-background-light rounded-t-[50%] scale-x-110 translate-y-1/2"></div>
 </section>
+
 
 <!-- Hourly Forecast Section -->
 <section class="relative z-20 bg-background-light px-4 py-12 lg:px-8">
@@ -358,55 +368,111 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // Fetch Weather Data (Skeleton Loading Pattern)
+    let citiesData = null;
+    let currentCity = 'jakarta-pusat';
+    
+    // Update hero weather display with city data
+    function updateHeroWeather(city) {
+        const locEl = document.getElementById('weather-location');
+        locEl.textContent = city.name;
+        locEl.className = 'text-white';
+        
+        const descEl = document.getElementById('weather-desc');
+        descEl.textContent = city.weather_desc;
+        descEl.className = 'text-xl font-medium text-white/90 mb-8';
+
+        const tempEl = document.getElementById('weather-temp');
+        tempEl.innerHTML = city.t;
+        document.getElementById('weather-temp-unit').classList.remove('hidden');
+        
+        // Stats
+        const humEl = document.getElementById('weather-humidity');
+        humEl.textContent = city.hu + '%';
+        humEl.className = 'text-sm font-bold';
+        
+        const windEl = document.getElementById('weather-wind');
+        windEl.textContent = Math.round(city.ws) + 'km/h';
+        windEl.className = 'text-sm font-bold';
+        
+        const rainEl = document.getElementById('weather-rain');
+        rainEl.textContent = city.tp + 'mm';
+        rainEl.className = 'text-sm font-bold';
+        
+        // Update icon
+        const iconEl = document.getElementById('weather-icon-main');
+        if (iconEl) {
+            iconEl.textContent = city.icon;
+        }
+    }
+    
+    // Set active pill style
+    function setActivePill(cityId) {
+        document.querySelectorAll('.location-pill').forEach(pill => {
+            if (pill.dataset.city === cityId) {
+                pill.className = 'location-pill snap-start shrink-0 px-4 py-2 rounded-full bg-white text-blue-600 font-semibold text-sm cursor-pointer transition-all shadow-lg';
+            } else {
+                pill.className = 'location-pill snap-start shrink-0 px-4 py-2 rounded-full bg-white/20 hover:bg-white/30 text-white font-medium text-sm cursor-pointer transition-all border border-white/20';
+            }
+        });
+    }
+    
+    // Fetch Weather Data
     fetch('<?= base_url('landing/api_weather') ?>')
         .then(response => response.json())
         .then(data => {
-            // Update Hero
-            if (data.lokasi) {
-                const locEl = document.getElementById('weather-location');
-                locEl.textContent = data.lokasi.provinsi;
-                locEl.className = 'text-white'; // Remove skeleton
+            citiesData = data.cities;
+            
+            // Populate location carousel
+            if (data.cities) {
+                const carousel = document.getElementById('location-carousel');
+                carousel.innerHTML = ''; // Clear skeletons
+                
+                let isFirst = true;
+                for (const [cityId, city] of Object.entries(data.cities)) {
+                    const activeClass = isFirst 
+                        ? 'bg-white text-blue-600 font-semibold shadow-lg' 
+                        : 'bg-white/20 hover:bg-white/30 text-white font-medium border border-white/20';
+                    
+                    const html = `<button class="location-pill snap-start shrink-0 px-4 py-2 rounded-full ${activeClass} text-sm cursor-pointer transition-all" data-city="${cityId}">${city.name}</button>`;
+                    carousel.insertAdjacentHTML('beforeend', html);
+                    
+                    if (isFirst) {
+                        currentCity = cityId;
+                        updateHeroWeather(city);
+                        isFirst = false;
+                    }
+                }
+                
+                // Add click handlers to pills
+                document.querySelectorAll('.location-pill').forEach(pill => {
+                    pill.addEventListener('click', () => {
+                        const cityId = pill.dataset.city;
+                        if (citiesData[cityId]) {
+                            currentCity = cityId;
+                            updateHeroWeather(citiesData[cityId]);
+                            setActivePill(cityId);
+                        }
+                    });
+                });
             }
-            if (data.cuaca_sekarang) {
-                const descEl = document.getElementById('weather-desc');
-                descEl.textContent = data.cuaca_sekarang.weather_desc;
-                descEl.className = 'text-xl font-medium text-white/90 mb-8';
-
-                const tempEl = document.getElementById('weather-temp');
-                tempEl.innerHTML = data.cuaca_sekarang.t;
-                document.getElementById('weather-temp-unit').classList.remove('hidden');
-                
-                const maxEl = document.getElementById('weather-max');
-                maxEl.textContent = 'H: ' + data.suhu_max + '°';
-                maxEl.className = '';
-                
-                const minEl = document.getElementById('weather-min');
-                minEl.textContent = 'L: ' + data.suhu_min + '°';
-                minEl.className = '';
-                
-                // Stats
-                const humEl = document.getElementById('weather-humidity');
-                humEl.textContent = data.cuaca_sekarang.hu + '%';
-                humEl.className = 'text-sm font-bold';
-                
-                const windEl = document.getElementById('weather-wind');
-                windEl.textContent = Math.round(data.cuaca_sekarang.ws) + 'km/h';
-                windEl.className = 'text-sm font-bold';
-                
-                const rainEl = document.getElementById('weather-rain');
-                rainEl.textContent = data.cuaca_sekarang.tp + 'mm';
-                rainEl.className = 'text-sm font-bold';
-            }
+            
+            // Update min/max from API
+            const maxEl = document.getElementById('weather-max');
+            maxEl.textContent = 'H: ' + data.suhu_max + '°';
+            maxEl.className = '';
+            
+            const minEl = document.getElementById('weather-min');
+            minEl.textContent = 'L: ' + data.suhu_min + '°';
+            minEl.className = '';
             
             // Update Forecast
             if (data.forecast) {
-                 const list = document.getElementById('forecast-list');
-                 list.innerHTML = ''; // Clear skeletons
-                 data.forecast.forEach((w, index) => {
-                     const percent = 50 + index * 5;
-                     const left = 10 + index * 3;
-                     const html = `
+                const list = document.getElementById('forecast-list');
+                list.innerHTML = '';
+                data.forecast.forEach((w, index) => {
+                    const percent = 50 + index * 5;
+                    const left = 10 + index * 3;
+                    const html = `
                     <div class="grid grid-cols-[70px_1fr_auto] md:grid-cols-[80px_140px_1fr] items-center gap-2 md:gap-4 p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 mb-2 hover:bg-white/20 transition-all" style="animation-delay: ${index * 100}ms">
                         <span class="font-medium text-white/90 text-sm">${w.day}</span>
                         <div class="flex items-center gap-2">
@@ -422,7 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>`;
                     list.insertAdjacentHTML('beforeend', html);
-                 });
+                });
             }
         })
         .catch(err => console.error('Failed to load weather', err));
