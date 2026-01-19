@@ -62,6 +62,10 @@ $route['admin'] = 'admin/Dashboard';
 $route['admin/users'] = 'admin/Users';
 $route['admin/articles'] = 'admin/Articles';
 $route['admin/weather'] = 'admin/Weather';
+$route['admin/weather/api/(:any)'] = 'admin/Weather/api_city/$1';
+$route['admin/weather/api-kelurahan/(:any)'] = 'admin/Weather/api_kelurahan/$1';
+$route['admin/weather/api-areas'] = 'admin/Weather/api_areas';
+
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

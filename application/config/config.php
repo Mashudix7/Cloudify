@@ -28,6 +28,7 @@ $config['base_url'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 
     . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') 
     . rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/\\') . '/';
 
+
 /*
 |--------------------------------------------------------------------------
 | Index File
